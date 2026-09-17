@@ -984,7 +984,7 @@ async function saveCow() {
     shipment_date:cow.shipDate||null, shipment_weight:cow.shipWeight===""?null:Number(cow.shipWeight),
     shipment_price:cow.shipPrice===""?null:Number(cow.shipPrice),
     shipment_photo:cow.shipPhoto||null, birth_photo:cow.birthPhoto||null,
-    growth_photo:cow.growthPhotos
+    growth_photos:cow.growthPhotos
   };
   let error=null;
   if(editingCowIndex!==null){
