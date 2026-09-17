@@ -1,0 +1,2576 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>牛の一生アルバム</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  background: #e9e5df;
+  font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
+  color: #3d3935;
+  -webkit-text-size-adjust: 100%;
+}
+
+button,
+input,
+select {
+  font-family: inherit;
+}
+
+button {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.app {
+  width: 100%;
+  max-width: 430px;
+  min-height: 100vh;
+  margin: 0 auto;
+  background: #faf8f4;
+  overflow-x: hidden;
+}
+
+.header {
+  background: #ffffff;
+  padding: 18px;
+  border-bottom: 1px solid #eee9e2;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 21px;
+  line-height: 1.4;
+}
+
+.header p {
+  margin: 5px 0 0;
+  font-size: 12px;
+  color: #8b837b;
+}
+
+.screen {
+  padding: 18px;
+  width: 100%;
+  min-width: 0;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.main-button {
+  width: 100%;
+  min-height: 52px;
+  border: none;
+  border-radius: 15px;
+  padding: 15px;
+  background: #78946b;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.sub-button {
+  width: 100%;
+  min-height: 46px;
+  border: 1px solid #d9d2c8;
+  border-radius: 13px;
+  padding: 11px 13px;
+  background: white;
+  color: #625b54;
+  font-size: 14px;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.filter-box {
+  background: white;
+  padding: 15px;
+  border-radius: 17px;
+  margin-top: 18px;
+  width: 100%;
+  min-width: 0;
+}
+
+.filter-title {
+  font-size: 15px;
+  font-weight: bold;
+  margin-bottom: 12px;
+}
+
+.filter-row {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+  min-width: 0;
+}
+
+.filter-row select {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+select,
+input {
+  width: 100%;
+  min-width: 0;
+  min-height: 46px;
+  padding: 11px;
+  border: 1px solid #ded8d0;
+  border-radius: 10px;
+  background: #fffdfa;
+  font-size: 16px;
+  color: #3d3935;
+}
+
+select {
+  appearance: auto;
+}
+
+input[type="number"] {
+  font-size: 16px;
+}
+
+input[type="date"] {
+  font-size: 16px;
+}
+
+.clear-filter {
+  margin-top: 8px;
+  width: 100%;
+  min-height: 40px;
+  padding: 9px;
+  border: none;
+  background: none;
+  color: #78946b;
+  font-size: 14px;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.list-title {
+  margin-top: 22px;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.cow-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 12px;
+  width: 100%;
+}
+
+.cow-card {
+  background: white;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  cursor: pointer;
+  min-width: 0;
+}
+
+.cow-card img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  background: #eee9e2;
+  display: block;
+}
+
+.cow-info {
+  padding: 10px;
+  min-width: 0;
+}
+
+.cow-number {
+  font-size: 13px;
+  font-weight: bold;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.cow-name {
+  font-size: 13px;
+  font-weight: bold;
+  color: #78946b;
+  margin-top: 4px;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.cow-date {
+  font-size: 11px;
+  color: #99918a;
+  margin-top: 4px;
+  overflow-wrap: anywhere;
+}
+
+.edit-button {
+  margin-top: 9px;
+}
+
+.ranking-section {
+  margin-top: 25px;
+  width: 100%;
+  min-width: 0;
+}
+
+.ranking-title {
+  font-size: 17px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  line-height: 1.5;
+}
+
+.ranking-card {
+  background: white;
+  border-radius: 15px;
+  padding: 12px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  min-width: 0;
+  width: 100%;
+}
+
+.rank {
+  width: 35px;
+  min-width: 35px;
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.rank-photo {
+  width: 52px;
+  height: 52px;
+  min-width: 52px;
+  border-radius: 10px;
+  object-fit: cover;
+  background: #eee9e2;
+  margin-right: 10px;
+}
+
+.rank-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.rank-number {
+  font-size: 13px;
+  font-weight: bold;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.rank-name {
+  margin-top: 2px;
+  font-size: 12px;
+  color: #78946b;
+  font-weight: bold;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.rank-value {
+  margin-top: 4px;
+  font-size: 13px;
+  color: #78946b;
+  font-weight: bold;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.rank-count {
+  margin-top: 3px;
+  font-size: 11px;
+  color: #99918a;
+}
+
+.rank-empty {
+  background: white;
+  padding: 20px;
+  border-radius: 15px;
+  color: #999;
+  text-align: center;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.form-section {
+  background: white;
+  border-radius: 17px;
+  padding: 17px;
+  margin-bottom: 15px;
+  width: 100%;
+  min-width: 0;
+}
+
+.section-title {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+.field {
+  margin-bottom: 14px;
+}
+
+.field:last-child {
+  margin-bottom: 0;
+}
+
+label {
+  display: block;
+  font-size: 13px;
+  font-weight: bold;
+  margin-bottom: 6px;
+}
+
+.photo-preview {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border-radius: 14px;
+  background: #f0ece6;
+  object-fit: cover;
+  display: none;
+  margin-top: 10px;
+}
+
+.photo-label {
+  display: block;
+  width: 100%;
+  min-height: 48px;
+  text-align: center;
+  padding: 13px;
+  border-radius: 12px;
+  background: #eee9e2;
+  color: #665f58;
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 1.5;
+  touch-action: manipulation;
+}
+
+input[type="file"] {
+  display: none;
+}
+
+.growth-list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 7px;
+  margin-top: 10px;
+  width: 100%;
+}
+
+.growth-preview {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 9px;
+  display: block;
+}
+
+.back-button {
+  border: none;
+  background: none;
+  padding: 0 0 15px;
+  color: #718963;
+  font-size: 14px;
+  cursor: pointer;
+  touch-action: manipulation;
+  min-height: 40px;
+}
+
+.album-header {
+  background: white;
+  border-radius: 18px;
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+
+.album-cover {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  display: block;
+}
+
+.album-info {
+  padding: 15px;
+  min-width: 0;
+}
+
+.album-number {
+  font-size: 21px;
+  font-weight: bold;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.album-name {
+  margin-top: 5px;
+  color: #78946b;
+  font-size: 15px;
+  font-weight: bold;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.album-basic {
+  color: #817970;
+  font-size: 13px;
+  margin-top: 7px;
+  line-height: 1.7;
+}
+
+.album-section {
+  margin-top: 18px;
+}
+
+.album-section-title {
+  font-size: 15px;
+  font-weight: bold;
+  margin-bottom: 9px;
+}
+
+.photo-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 7px;
+  width: 100%;
+}
+
+.album-photo {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 12px;
+  background: #eee9e2;
+  display: block;
+}
+
+.detail-box {
+  background: white;
+  border-radius: 15px;
+  padding: 15px;
+  font-size: 13px;
+  line-height: 1.9;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.empty {
+  text-align: center;
+  padding: 50px 20px;
+  color: #99918a;
+}
+
+.bottom-space {
+  height: 35px;
+}
+
+/* スマートフォン向け微調整 */
+@media (max-width: 430px) {
+  body {
+    background: #faf8f4;
+  }
+
+  .app {
+    max-width: none;
+    width: 100%;
+  }
+
+  .header {
+    padding-top: calc(15px + env(safe-area-inset-top));
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .screen {
+    padding: 15px;
+  }
+
+  .filter-row {
+    gap: 6px;
+  }
+
+  .filter-row select {
+    font-size: 14px;
+    padding-left: 9px;
+    padding-right: 9px;
+  }
+
+  .cow-grid {
+    gap: 10px;
+  }
+
+  .cow-info {
+    padding: 9px;
+  }
+
+  .ranking-card {
+    padding: 11px;
+  }
+
+  .rank {
+    width: 30px;
+    min-width: 30px;
+  }
+
+  .rank-photo {
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+    margin-right: 9px;
+  }
+
+  .form-section {
+    padding: 15px;
+  }
+}
+
+/* とても小さいスマートフォン */
+@media (max-width: 350px) {
+  .screen {
+    padding: 12px;
+  }
+
+  .header {
+    padding-left: 13px;
+    padding-right: 13px;
+  }
+
+  .filter-row {
+    flex-direction: column;
+  }
+
+  .filter-row select {
+    width: 100%;
+  }
+
+  .cow-grid {
+    gap: 8px;
+  }
+
+  .cow-info {
+    padding: 8px;
+  }
+
+  .ranking-card {
+    padding: 9px;
+  }
+
+  .rank {
+    width: 27px;
+    min-width: 27px;
+    font-size: 16px;
+  }
+
+  .rank-photo {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    margin-right: 8px;
+  }
+}
+
+/* PCでは今まで通り中央のスマホ風表示 */
+@media (min-width: 431px) {
+  .app {
+    box-shadow: 0 0 30px rgba(0,0,0,0.08);
+  }
+}
+
+.login-screen { min-height:100vh; display:flex; align-items:center; justify-content:center; padding:20px; }
+.login-box { width:100%; max-width:430px; background:white; border-radius:20px; padding:24px; box-shadow:0 4px 20px rgba(0,0,0,0.08); }
+.login-box h2 { margin:0 0 8px; font-size:21px; }
+.login-box p { margin:0 0 20px; color:#8b837b; font-size:13px; line-height:1.6; }
+.login-error { color:#b44; font-size:13px; margin-top:10px; line-height:1.5; }
+</style>
+</head>
+
+<body>
+
+<div id="loginScreen" class="login-screen">
+  <div class="login-box">
+    <h2>🐄 牛の一生アルバム</h2>
+    <p>メールアドレスとパスワードでログインしてください。</p>
+    <div class="field"><label>メールアドレス</label><input id="loginEmail" type="email" autocomplete="username" placeholder="メールアドレス"></div>
+    <div class="field"><label>パスワード</label><input id="loginPassword" type="password" autocomplete="current-password" placeholder="パスワード"></div>
+    <button class="main-button" onclick="login()">ログイン</button>
+    <div id="loginError" class="login-error"></div>
+  </div>
+</div>
+
+<div class="app" id="app" style="display:none;">
+
+<header class="header">
+  <h1>🐄 牛の一生アルバム</h1>
+  <p>一頭一頭の成長を、写真で残そう</p>
+</header>
+
+<!-- ホーム -->
+<main id="homeScreen" class="screen">
+
+  <button class="main-button" onclick="showRegister()">
+    ＋ 新しい牛を登録
+  </button>
+
+  <div class="filter-box">
+    <div class="filter-title">🔎 牛を絞り込む</div>
+
+    <div class="filter-row">
+      <select id="motherFilter" onchange="renderCowList()">
+        <option value="">母牛：すべて</option>
+      </select>
+
+      <select id="fatherFilter" onchange="renderCowList()">
+        <option value="">父牛：すべて</option>
+      </select>
+    </div>
+
+    <button class="clear-filter" onclick="clearFilters()">
+      絞り込みを解除
+    </button>
+  </div>
+
+  <div class="list-title">🐄 登録されている牛</div>
+
+  <div id="cowList"></div>
+
+  <!-- 個体別ランキング -->
+  <div class="ranking-section">
+    <div class="ranking-title">⚖️ 出荷体重ランキング</div>
+    <div id="weightRanking"></div>
+  </div>
+
+  <div class="ranking-section">
+    <div class="ranking-title">💰 出荷価格ランキング</div>
+    <div id="priceRanking"></div>
+  </div>
+
+  <!-- 母牛別ランキング -->
+  <div class="ranking-section">
+    <div class="ranking-title">
+      🐄 母牛別・平均出荷体重ランキング
+    </div>
+    <div id="motherWeightRanking"></div>
+  </div>
+
+  <div class="ranking-section">
+    <div class="ranking-title">
+      💰 母牛別・平均出荷価格ランキング
+    </div>
+    <div id="motherPriceRanking"></div>
+  </div>
+
+  <!-- 父牛別ランキング -->
+  <div class="ranking-section">
+    <div class="ranking-title">
+      🐂 父牛別・平均出荷体重ランキング
+    </div>
+    <div id="fatherWeightRanking"></div>
+  </div>
+
+  <div class="ranking-section">
+    <div class="ranking-title">
+      💰 父牛別・平均出荷価格ランキング
+    </div>
+    <div id="fatherPriceRanking"></div>
+  </div>
+
+  <div class="bottom-space"></div>
+
+</main>
+
+
+<!-- 登録・編集画面 -->
+<main id="registerScreen" class="screen hidden">
+
+  <button class="back-button" onclick="showHome()">
+    ← 牛の一覧に戻る
+  </button>
+
+  <section class="form-section">
+
+    <div class="section-title">🐄 基本情報</div>
+
+    <div class="field">
+      <label>個体番号</label>
+      <input
+        id="cowNumber"
+        type="text"
+        placeholder="例：1234567890"
+        autocomplete="off"
+      >
+    </div>
+
+    <div class="field">
+      <label>子牛の名前</label>
+      <input
+        id="cowName"
+        type="text"
+        placeholder="例：まめきち"
+        autocomplete="off"
+      >
+    </div>
+
+    <div class="field">
+      <label>生年月日</label>
+      <input id="birthDate" type="date">
+    </div>
+
+    <div class="field">
+      <label>性別</label>
+
+      <select id="gender">
+        <option value="">選択してください</option>
+        <option value="メス">♀ メス</option>
+        <option value="オス">♂ オス</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label>父牛</label>
+
+      <input
+        id="father"
+        type="text"
+        placeholder="父牛の個体番号など"
+        autocomplete="off"
+      >
+    </div>
+
+    <div class="field">
+      <label>母牛</label>
+
+      <input
+        id="mother"
+        type="text"
+        placeholder="母牛の個体番号など"
+        autocomplete="off"
+      >
+    </div>
+
+    <div class="field">
+      <label>出生時体重（kg）</label>
+
+      <input
+        id="birthWeight"
+        type="number"
+        inputmode="decimal"
+        placeholder="例：32"
+      >
+    </div>
+
+  </section>
+
+
+  <section class="form-section">
+
+    <div class="section-title">📷 出生時の写真</div>
+
+    <label class="photo-label" for="birthPhoto">
+      📸 出生時の写真を選ぶ
+    </label>
+
+    <input
+      id="birthPhoto"
+      type="file"
+      accept="image/*"
+      onchange="previewBirthPhoto(event)"
+    >
+
+    <img
+      id="birthPreview"
+      class="photo-preview"
+      alt="出生時写真"
+    >
+
+  </section>
+
+
+  <section class="form-section">
+
+    <div class="section-title">🌱 成長中の写真</div>
+
+    <label class="photo-label" for="growthPhotos">
+      ＋ 成長写真を複数追加
+    </label>
+
+    <input
+      id="growthPhotos"
+      type="file"
+      accept="image/*"
+      multiple
+      onchange="previewGrowthPhotos(event)"
+    >
+
+    <div id="growthPreviewList" class="growth-list"></div>
+
+  </section>
+
+
+  <section class="form-section">
+
+    <div class="section-title">🚚 出荷情報</div>
+
+    <div class="field">
+      <label>出荷日</label>
+      <input id="shipDate" type="date">
+    </div>
+
+    <div class="field">
+      <label>出荷体重（kg）</label>
+
+      <input
+        id="shipWeight"
+        type="number"
+        inputmode="decimal"
+        placeholder="例：750"
+      >
+    </div>
+
+    <div class="field">
+      <label>出荷価格（円）</label>
+
+      <input
+        id="shipPrice"
+        type="number"
+        inputmode="numeric"
+        placeholder="例：1200000"
+      >
+    </div>
+
+    <div class="field">
+
+      <label>出荷時の写真</label>
+
+      <label class="photo-label" for="shipPhoto">
+        📸 出荷時の写真を選ぶ
+      </label>
+
+      <input
+        id="shipPhoto"
+        type="file"
+        accept="image/*"
+        onchange="previewShipPhoto(event)"
+      >
+
+      <img
+        id="shipPreview"
+        class="photo-preview"
+        alt="出荷時写真"
+      >
+
+    </div>
+
+  </section>
+
+
+  <button
+    id="saveButton"
+    class="main-button"
+    onclick="saveCow()"
+  >
+    💾 この牛を登録する
+  </button>
+
+  <div class="bottom-space"></div>
+
+</main>
+
+
+<!-- アルバム -->
+<main id="albumScreen" class="screen hidden">
+
+  <button class="back-button" onclick="showHome()">
+    ← 牛の一覧に戻る
+  </button>
+
+  <div id="albumContent"></div>
+
+  <div class="bottom-space"></div>
+
+</main>
+
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL = "https://vasaicuwnugaubeztbhq.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY = "YOUR_SUPABASE_PUBLISHABLE_KEY_HERE";
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+
+let currentUser = null;
+let cows = [];
+let currentBirthPhoto = "";
+let currentShipPhoto = "";
+let currentGrowthPhotos = [];
+let editingCowIndex = null;
+
+async function login() {
+  const email=document.getElementById("loginEmail").value.trim();
+  const password=document.getElementById("loginPassword").value;
+  const errorBox=document.getElementById("loginError");
+  errorBox.textContent="";
+  if(!email||!password){ errorBox.textContent="メールアドレスとパスワードを入力してください。"; return; }
+  const {data,error}=await supabaseClient.auth.signInWithPassword({email,password});
+  if(error){ errorBox.textContent="ログインできませんでした。メールアドレスまたはパスワードを確認してください。"; return; }
+  currentUser=data.user;
+  document.getElementById("loginScreen").style.display="none";
+  document.getElementById("app").style.display="block";
+  await loadCows();
+  showHome();
+}
+
+async function loadCows() {
+  const {data,error}=await supabaseClient.from("cows").select("*").order("id",{ascending:true});
+  if(error){ alert("牛のデータを読み込めませんでした。\n"+error.message); return; }
+  cows=(data||[]).map(row=>({
+    dbId:row.id, number:row.individual_id||"", calfName:row.calf_name||"",
+    birthDate:row.birth_date||"", gender:row.sex||"", father:row.father||"",
+    mother:row.mother||"", birthWeight:row.birth_weight??"",
+    shipDate:row.shipment_date||"", shipWeight:row.shipment_weight??"",
+    shipPrice:row.shipment_price??"", shipPhoto:row.shipment_photo||"",
+    birthPhoto:row.birth_photo||"", growthPhotos:Array.isArray(row.growth_photos)?row.growth_photos:[]
+  }));
+}
+
+async function saveCow() {
+  const cow={
+    number:document.getElementById("cowNumber").value,
+    calfName:document.getElementById("cowName").value,
+    birthDate:document.getElementById("birthDate").value,
+    gender:document.getElementById("gender").value,
+    father:document.getElementById("father").value,
+    mother:document.getElementById("mother").value,
+    birthWeight:document.getElementById("birthWeight").value,
+    birthPhoto:currentBirthPhoto, growthPhotos:currentGrowthPhotos,
+    shipDate:document.getElementById("shipDate").value,
+    shipWeight:document.getElementById("shipWeight").value,
+    shipPrice:document.getElementById("shipPrice").value, shipPhoto:currentShipPhoto
+  };
+  const row={
+    individual_id:cow.number||null, calf_name:cow.calfName||null,
+    birth_date:cow.birthDate||null, sex:cow.gender||null, father:cow.father||null,
+    mother:cow.mother||null, birth_weight:cow.birthWeight===""?null:Number(cow.birthWeight),
+    shipment_date:cow.shipDate||null, shipment_weight:cow.shipWeight===""?null:Number(cow.shipWeight),
+    shipment_price:cow.shipPrice===""?null:Number(cow.shipPrice),
+    shipment_photo:cow.shipPhoto||null, birth_photo:cow.birthPhoto||null,
+    growth_photos:cow.growthPhotos
+  };
+  let error=null;
+  if(editingCowIndex!==null){
+    const dbId=cows[editingCowIndex]?.dbId;
+    if(!dbId){ alert("編集対象のIDが見つかりませんでした。"); return; }
+    const result=await supabaseClient.from("cows").update(row).eq("id",dbId);
+    error=result.error;
+    if(!error){ cows[editingCowIndex]={dbId,...cow}; alert("🐄 牛の情報を変更しました！"); }
+  } else {
+    const result=await supabaseClient.from("cows").insert(row).select().single();
+    error=result.error;
+    if(!error&&result.data){ cows.push({dbId:result.data.id,...cow}); alert("🐄 牛を登録しました！"); }
+  }
+  if(error){ alert("保存できませんでした。\n"+error.message); return; }
+  editingCowIndex=null; showHome();
+}
+
+(async function init(){
+  const {data}=await supabaseClient.auth.getSession();
+  if(data?.session?.user){
+    currentUser=data.session.user;
+    document.getElementById("loginScreen").style.display="none";
+    document.getElementById("app").style.display="block";
+    await loadCows(); showHome();
+  }
+});
+
+/* =========================================
+   データ
+========================================= */
+
+/* =========================================
+   画面切り替え
+========================================= */
+
+function showHome() {
+
+  document.getElementById("homeScreen").classList.remove("hidden");
+  document.getElementById("registerScreen").classList.add("hidden");
+  document.getElementById("albumScreen").classList.add("hidden");
+
+  updateFilters();
+  renderCowList();
+  renderRankings();
+}
+
+
+function showRegister(index = null) {
+
+  document.getElementById("homeScreen").classList.add("hidden");
+  document.getElementById("registerScreen").classList.remove("hidden");
+  document.getElementById("albumScreen").classList.add("hidden");
+
+  editingCowIndex = index;
+
+  resetForm();
+
+  if (editingCowIndex !== null) {
+    loadCowToForm(cows[editingCowIndex]);
+
+    document.getElementById("saveButton").textContent =
+      "💾 変更を保存する";
+  } else {
+
+    document.getElementById("saveButton").textContent =
+      "💾 この牛を登録する";
+  }
+
+}
+
+
+/* =========================================
+   牛の編集
+========================================= */
+
+function editCow(index) {
+
+  if (index < 0 || index >= cows.length) return;
+
+  showRegister(index);
+}
+
+
+/* =========================================
+   フォームへ既存データを読み込む
+========================================= */
+
+function loadCowToForm(cow) {
+
+  document.getElementById("cowNumber").value =
+    cow.number || "";
+
+  document.getElementById("cowName").value =
+    cow.calfName || "";
+
+  document.getElementById("birthDate").value =
+    cow.birthDate || "";
+
+  document.getElementById("gender").value =
+    cow.gender || "";
+
+  document.getElementById("father").value =
+    cow.father || "";
+
+  document.getElementById("mother").value =
+    cow.mother || "";
+
+  document.getElementById("birthWeight").value =
+    cow.birthWeight || "";
+
+  document.getElementById("shipDate").value =
+    cow.shipDate || "";
+
+  document.getElementById("shipWeight").value =
+    cow.shipWeight || "";
+
+  document.getElementById("shipPrice").value =
+    cow.shipPrice || "";
+
+
+  /* 写真 */
+
+  currentBirthPhoto = cow.birthPhoto || "";
+  currentShipPhoto = cow.shipPhoto || "";
+
+  currentGrowthPhotos =
+    Array.isArray(cow.growthPhotos)
+      ? [...cow.growthPhotos]
+      : [];
+
+
+  /* 出生写真 */
+
+  const birthPreview =
+    document.getElementById("birthPreview");
+
+  if (currentBirthPhoto) {
+
+    birthPreview.src = currentBirthPhoto;
+    birthPreview.style.display = "block";
+
+  } else {
+
+    birthPreview.removeAttribute("src");
+    birthPreview.style.display = "none";
+  }
+
+
+  /* 出荷写真 */
+
+  const shipPreview =
+    document.getElementById("shipPreview");
+
+  if (currentShipPhoto) {
+
+    shipPreview.src = currentShipPhoto;
+    shipPreview.style.display = "block";
+
+  } else {
+
+    shipPreview.removeAttribute("src");
+    shipPreview.style.display = "none";
+  }
+
+
+  renderGrowthPreview();
+}
+
+
+/* =========================================
+   絞り込み
+========================================= */
+
+function updateFilters() {
+
+  const motherSelect =
+    document.getElementById("motherFilter");
+
+  const fatherSelect =
+    document.getElementById("fatherFilter");
+
+
+  const currentMother =
+    motherSelect.value;
+
+  const currentFather =
+    fatherSelect.value;
+
+
+  const mothers =
+    [...new Set(
+      cows
+        .map(cow => cow.mother)
+        .filter(Boolean)
+    )];
+
+
+  const fathers =
+    [...new Set(
+      cows
+        .map(cow => cow.father)
+        .filter(Boolean)
+    )];
+
+
+  motherSelect.innerHTML =
+    `<option value="">母牛：すべて</option>`;
+
+
+  mothers.forEach(mother => {
+
+    motherSelect.innerHTML +=
+      `<option value="${escapeHTML(mother)}">
+        ${escapeHTML(mother)}
+      </option>`;
+
+  });
+
+
+  fatherSelect.innerHTML =
+    `<option value="">父牛：すべて</option>`;
+
+
+  fathers.forEach(father => {
+
+    fatherSelect.innerHTML +=
+      `<option value="${escapeHTML(father)}">
+        ${escapeHTML(father)}
+      </option>`;
+
+  });
+
+
+  motherSelect.value = currentMother;
+  fatherSelect.value = currentFather;
+}
+
+
+function clearFilters() {
+
+  document.getElementById("motherFilter").value = "";
+  document.getElementById("fatherFilter").value = "";
+
+  renderCowList();
+}
+
+
+function getFilteredCows() {
+
+  const mother =
+    document.getElementById("motherFilter").value;
+
+  const father =
+    document.getElementById("fatherFilter").value;
+
+
+  return cows
+    .map((cow, index) => ({
+      cow,
+      index
+    }))
+    .filter(item => {
+
+      const cow = item.cow;
+
+      if (mother && cow.mother !== mother) {
+        return false;
+      }
+
+      if (father && cow.father !== father) {
+        return false;
+      }
+
+      return true;
+    });
+}
+
+
+/* =========================================
+   牛一覧
+========================================= */
+
+function renderCowList() {
+
+  const list =
+    document.getElementById("cowList");
+
+  const filtered =
+    getFilteredCows();
+
+
+  if (filtered.length === 0) {
+
+    list.innerHTML = `
+      <div class="empty">
+        <div style="font-size:50px;">🐄</div>
+        <div>該当する牛がいません</div>
+      </div>
+    `;
+
+    return;
+  }
+
+
+  let html =
+    `<div class="cow-grid">`;
+
+
+  filtered.forEach(item => {
+
+    const cow = item.cow;
+    const index = item.index;
+
+
+    const image =
+      cow.birthPhoto ||
+      (
+        cow.growthPhotos &&
+        cow.growthPhotos.length
+          ? cow.growthPhotos[0]
+          : ""
+      );
+
+
+    html += `
+
+      <div class="cow-card"
+           onclick="openAlbum(${index})">
+
+        ${
+          image
+            ? `<img src="${image}" alt="牛の写真">`
+            : `
+              <div style="
+                aspect-ratio:1;
+                display:flex;
+                align-items:center;
+                justify-content:center;
+                background:#eee9e2;
+                font-size:45px;
+              ">🐄</div>
+            `
+        }
+
+        <div class="cow-info">
+
+          <div class="cow-number">
+            ${escapeHTML(
+              cow.number || "個体番号未登録"
+            )}
+          </div>
+
+          ${
+            cow.calfName
+              ? `
+                <div class="cow-name">
+                  ${escapeHTML(cow.calfName)}
+                </div>
+              `
+              : ""
+          }
+
+          <div class="cow-date">
+            ${escapeHTML(cow.birthDate || "")}
+          </div>
+
+          <button
+            class="sub-button edit-button"
+            onclick="
+              event.stopPropagation();
+              editCow(${index});
+            "
+          >
+            ✏️ 編集
+          </button>
+
+        </div>
+
+      </div>
+
+    `;
+
+  });
+
+
+  html += `</div>`;
+
+  list.innerHTML = html;
+}
+
+
+/* =========================================
+   ランキング全体
+========================================= */
+
+function renderRankings() {
+
+  renderWeightRanking();
+  renderPriceRanking();
+
+  renderMotherWeightRanking();
+  renderMotherPriceRanking();
+
+  renderFatherWeightRanking();
+  renderFatherPriceRanking();
+}
+
+
+/* =========================================
+   個体別・出荷体重
+========================================= */
+
+function renderWeightRanking() {
+
+  const container =
+    document.getElementById("weightRanking");
+
+
+  const ranking =
+    cows
+      .map((cow, index) => ({
+        cow,
+        index,
+        value: Number(cow.shipWeight)
+      }))
+      .filter(item => item.value > 0)
+      .sort((a, b) => b.value - a.value);
+
+
+  if (ranking.length === 0) {
+
+    container.innerHTML = `
+      <div class="rank-empty">
+        出荷体重が登録された牛はまだいません
+      </div>
+    `;
+
+    return;
+  }
+
+
+  container.innerHTML =
+    ranking
+      .slice(0, 10)
+      .map((item, position) => {
+
+        const cow = item.cow;
+
+
+        const image =
+          cow.birthPhoto ||
+          (
+            cow.growthPhotos &&
+            cow.growthPhotos.length
+              ? cow.growthPhotos[0]
+              : ""
+          );
+
+
+        return `
+
+          <div class="ranking-card"
+               onclick="openAlbum(${item.index})">
+
+            <div class="rank">
+              ${position + 1}
+            </div>
+
+            ${
+              image
+                ? `
+                  <img
+                    class="rank-photo"
+                    src="${image}"
+                    alt="牛の写真"
+                  >
+                `
+                : `
+                  <div
+                    class="rank-photo"
+                    style="
+                      display:flex;
+                      align-items:center;
+                      justify-content:center;
+                      font-size:25px;
+                    "
+                  >🐄</div>
+                `
+            }
+
+            <div class="rank-info">
+
+              <div class="rank-number">
+                ${escapeHTML(
+                  cow.number || "番号なし"
+                )}
+              </div>
+
+              ${
+                cow.calfName
+                  ? `
+                    <div class="rank-name">
+                      ${escapeHTML(cow.calfName)}
+                    </div>
+                  `
+                  : ""
+              }
+
+              <div class="rank-value">
+                ${item.value.toLocaleString()} kg
+              </div>
+
+            </div>
+
+          </div>
+
+        `;
+
+      })
+      .join("");
+}
+
+
+/* =========================================
+   個体別・出荷価格
+========================================= */
+
+function renderPriceRanking() {
+
+  const container =
+    document.getElementById("priceRanking");
+
+
+  const ranking =
+    cows
+      .map((cow, index) => ({
+        cow,
+        index,
+        value: Number(cow.shipPrice)
+      }))
+      .filter(item => item.value > 0)
+      .sort((a, b) => b.value - a.value);
+
+
+  if (ranking.length === 0) {
+
+    container.innerHTML = `
+      <div class="rank-empty">
+        出荷価格が登録された牛はまだいません
+      </div>
+    `;
+
+    return;
+  }
+
+
+  container.innerHTML =
+    ranking
+      .slice(0, 10)
+      .map((item, position) => {
+
+        const cow = item.cow;
+
+
+        const image =
+          cow.birthPhoto ||
+          (
+            cow.growthPhotos &&
+            cow.growthPhotos.length
+              ? cow.growthPhotos[0]
+              : ""
+          );
+
+
+        return `
+
+          <div class="ranking-card"
+               onclick="openAlbum(${item.index})">
+
+            <div class="rank">
+              ${position + 1}
+            </div>
+
+            ${
+              image
+                ? `
+                  <img
+                    class="rank-photo"
+                    src="${image}"
+                    alt="牛の写真"
+                  >
+                `
+                : `
+                  <div
+                    class="rank-photo"
+                    style="
+                      display:flex;
+                      align-items:center;
+                      justify-content:center;
+                      font-size:25px;
+                    "
+                  >🐄</div>
+                `
+            }
+
+            <div class="rank-info">
+
+              <div class="rank-number">
+                ${escapeHTML(
+                  cow.number || "番号なし"
+                )}
+              </div>
+
+              ${
+                cow.calfName
+                  ? `
+                    <div class="rank-name">
+                      ${escapeHTML(cow.calfName)}
+                    </div>
+                  `
+                  : ""
+              }
+
+              <div class="rank-value">
+                ¥${item.value.toLocaleString()}
+              </div>
+
+            </div>
+
+          </div>
+
+        `;
+
+      })
+      .join("");
+}
+
+
+/* =========================================
+   母牛別・平均値ランキングを作る
+========================================= */
+
+function createParentRanking(parentType, valueType) {
+
+  const groups = {};
+
+
+  cows.forEach(cow => {
+
+    const parent =
+      cow[parentType];
+
+
+    if (!parent) return;
+
+
+    if (!groups[parent]) {
+
+      groups[parent] = {
+        parent,
+        count: 0,
+        values: [],
+        sampleCow: cow
+      };
+
+    }
+
+
+    /* 登録されている子牛数 */
+    groups[parent].count++;
+
+
+    let value = 0;
+
+
+    if (valueType === "weight") {
+
+      value = Number(cow.shipWeight);
+
+    } else {
+
+      value = Number(cow.shipPrice);
+
+    }
+
+
+    /*
+      平均値の計算には、
+      実際に出荷データが登録されている
+      子牛だけを使用
+    */
+
+    if (value > 0) {
+
+      groups[parent].values.push(value);
+
+    }
+
+  });
+
+
+  return Object.values(groups)
+    .map(group => {
+
+      if (group.values.length === 0) {
+        return null;
+      }
+
+
+      const average =
+        group.values.reduce(
+          (sum, value) => sum + value,
+          0
+        ) / group.values.length;
+
+
+      return {
+        parent: group.parent,
+        count: group.count,
+        shipmentCount: group.values.length,
+        average,
+        sampleCow: group.sampleCow
+      };
+
+    })
+    .filter(Boolean)
+    .sort((a, b) => b.average - a.average);
+}
+
+
+/* =========================================
+   母牛別・平均出荷体重
+========================================= */
+
+function renderMotherWeightRanking() {
+
+  const container =
+    document.getElementById("motherWeightRanking");
+
+
+  const ranking =
+    createParentRanking("mother", "weight");
+
+
+  if (ranking.length === 0) {
+
+    container.innerHTML = `
+      <div class="rank-empty">
+        母牛に紐づいた出荷体重データがまだありません
+      </div>
+    `;
+
+    return;
+  }
+
+
+  container.innerHTML =
+    ranking
+      .slice(0, 10)
+      .map((item, position) => {
+
+        const cow = item.sampleCow;
+
+
+        const image =
+          cow.birthPhoto ||
+          (
+            cow.growthPhotos &&
+            cow.growthPhotos.length
+              ? cow.growthPhotos[0]
+              : ""
+          );
+
+
+        return `
+
+          <div class="ranking-card">
+
+            <div class="rank">
+              ${position + 1}
+            </div>
+
+            ${
+              image
+                ? `
+                  <img
+                    class="rank-photo"
+                    src="${image}"
+                    alt="子牛の写真"
+                  >
+                `
+                : `
+                  <div
+                    class="rank-photo"
+                    style="
+                      display:flex;
+                      align-items:center;
+                      justify-content:center;
+                      font-size:25px;
+                    "
+                  >🐄</div>
+                `
+            }
+
+            <div class="rank-info">
+
+              <div class="rank-number">
+                母牛：${escapeHTML(item.parent)}
+              </div>
+
+              <div class="rank-value">
+                平均 ${item.average.toLocaleString(
+                  undefined,
+                  {
+                    maximumFractionDigits: 1
+                  }
+                )} kg
+              </div>
+
+              <div class="rank-count">
+                登録子牛 ${item.count}頭
+              </div>
+
+            </div>
+
+          </div>
+
+        `;
+
+      })
+      .join("");
+}
+
+
+/* =========================================
+   母牛別・平均出荷価格
+========================================= */
+
+function renderMotherPriceRanking() {
+
+  const container =
+    document.getElementById("motherPriceRanking");
+
+
+  const ranking =
+    createParentRanking("mother", "price");
+
+
+  if (ranking.length === 0) {
+
+    container.innerHTML = `
+      <div class="rank-empty">
+        母牛に紐づいた出荷価格データがまだありません
+      </div>
+    `;
+
+    return;
+  }
+
+
+  container.innerHTML =
+    ranking
+      .slice(0, 10)
+      .map((item, position) => {
+
+        const cow = item.sampleCow;
+
+
+        const image =
+          cow.birthPhoto ||
+          (
+            cow.growthPhotos &&
+            cow.growthPhotos.length
+              ? cow.growthPhotos[0]
+              : ""
+          );
+
+
+        return `
+
+          <div class="ranking-card">
+
+            <div class="rank">
+              ${position + 1}
+            </div>
+
+            ${
+              image
+                ? `
+                  <img
+                    class="rank-photo"
+                    src="${image}"
+                    alt="子牛の写真"
+                  >
+                `
+                : `
+                  <div
+                    class="rank-photo"
+                    style="
+                      display:flex;
+                      align-items:center;
+                      justify-content:center;
+                      font-size:25px;
+                    "
+                  >🐄</div>
+                `
+            }
+
+            <div class="rank-info">
+
+              <div class="rank-number">
+                母牛：${escapeHTML(item.parent)}
+              </div>
+
+              <div class="rank-value">
+                平均 ¥${item.average.toLocaleString(
+                  undefined,
+                  {
+                    maximumFractionDigits: 0
+                  }
+                )}
+              </div>
+
+              <div class="rank-count">
+                登録子牛 ${item.count}頭
+              </div>
+
+            </div>
+
+          </div>
+
+        `;
+
+      })
+      .join("");
+}
+
+
+/* =========================================
+   父牛別・平均出荷体重
+========================================= */
+
+function renderFatherWeightRanking() {
+
+  const container =
+    document.getElementById("fatherWeightRanking");
+
+
+  const ranking =
+    createParentRanking("father", "weight");
+
+
+  if (ranking.length === 0) {
+
+    container.innerHTML = `
+      <div class="rank-empty">
+        父牛に紐づいた出荷体重データがまだありません
+      </div>
+    `;
+
+    return;
+  }
+
+
+  container.innerHTML =
+    ranking
+      .slice(0, 10)
+      .map((item, position) => {
+
+        const cow = item.sampleCow;
+
+
+        const image =
+          cow.birthPhoto ||
+          (
+            cow.growthPhotos &&
+            cow.growthPhotos.length
+              ? cow.growthPhotos[0]
+              : ""
+          );
+
+
+        return `
+
+          <div class="ranking-card">
+
+            <div class="rank">
+              ${position + 1}
+            </div>
+
+            ${
+              image
+                ? `
+                  <img
+                    class="rank-photo"
+                    src="${image}"
+                    alt="子牛の写真"
+                  >
+                `
+                : `
+                  <div
+                    class="rank-photo"
+                    style="
+                      display:flex;
+                      align-items:center;
+                      justify-content:center;
+                      font-size:25px;
+                    "
+                  >🐄</div>
+                `
+            }
+
+            <div class="rank-info">
+
+              <div class="rank-number">
+                父牛：${escapeHTML(item.parent)}
+              </div>
+
+              <div class="rank-value">
+                平均 ${item.average.toLocaleString(
+                  undefined,
+                  {
+                    maximumFractionDigits: 1
+                  }
+                )} kg
+              </div>
+
+              <div class="rank-count">
+                登録子牛 ${item.count}頭
+              </div>
+
+            </div>
+
+          </div>
+
+        `;
+
+      })
+      .join("");
+}
+
+
+/* =========================================
+   父牛別・平均出荷価格
+========================================= */
+
+function renderFatherPriceRanking() {
+
+  const container =
+    document.getElementById("fatherPriceRanking");
+
+
+  const ranking =
+    createParentRanking("father", "price");
+
+
+  if (ranking.length === 0) {
+
+    container.innerHTML = `
+      <div class="rank-empty">
+        父牛に紐づいた出荷価格データがまだありません
+      </div>
+    `;
+
+    return;
+  }
+
+
+  container.innerHTML =
+    ranking
+      .slice(0, 10)
+      .map((item, position) => {
+
+        const cow = item.sampleCow;
+
+
+        const image =
+          cow.birthPhoto ||
+          (
+            cow.growthPhotos &&
+            cow.growthPhotos.length
+              ? cow.growthPhotos[0]
+              : ""
+          );
+
+
+        return `
+
+          <div class="ranking-card">
+
+            <div class="rank">
+              ${position + 1}
+            </div>
+
+            ${
+              image
+                ? `
+                  <img
+                    class="rank-photo"
+                    src="${image}"
+                    alt="子牛の写真"
+                  >
+                `
+                : `
+                  <div
+                    class="rank-photo"
+                    style="
+                      display:flex;
+                      align-items:center;
+                      justify-content:center;
+                      font-size:25px;
+                    "
+                  >🐄</div>
+                `
+            }
+
+            <div class="rank-info">
+
+              <div class="rank-number">
+                父牛：${escapeHTML(item.parent)}
+              </div>
+
+              <div class="rank-value">
+                平均 ¥${item.average.toLocaleString(
+                  undefined,
+                  {
+                    maximumFractionDigits: 0
+                  }
+                )}
+              </div>
+
+              <div class="rank-count">
+                登録子牛 ${item.count}頭
+              </div>
+
+            </div>
+
+          </div>
+
+        `;
+
+      })
+      .join("");
+}
+
+
+/* =========================================
+   ファイル → DataURL
+========================================= */
+
+function fileToDataURL(file) {
+
+  return new Promise(resolve => {
+
+    const reader = new FileReader();
+
+    reader.onload = e => {
+      resolve(e.target.result);
+    };
+
+    reader.readAsDataURL(file);
+
+  });
+
+}
+
+
+/* =========================================
+   出生写真
+========================================= */
+
+async function previewBirthPhoto(event) {
+
+  const file =
+    event.target.files[0];
+
+  if (!file) return;
+
+
+  currentBirthPhoto =
+    await fileToDataURL(file);
+
+
+  const img =
+    document.getElementById("birthPreview");
+
+
+  img.src = currentBirthPhoto;
+  img.style.display = "block";
+}
+
+
+/* =========================================
+   出荷写真
+========================================= */
+
+async function previewShipPhoto(event) {
+
+  const file =
+    event.target.files[0];
+
+  if (!file) return;
+
+
+  currentShipPhoto =
+    await fileToDataURL(file);
+
+
+  const img =
+    document.getElementById("shipPreview");
+
+
+  img.src = currentShipPhoto;
+  img.style.display = "block";
+}
+
+
+/* =========================================
+   成長写真
+========================================= */
+
+async function previewGrowthPhotos(event) {
+
+  const files =
+    Array.from(event.target.files);
+
+
+  if (files.length === 0) {
+    return;
+  }
+
+
+  currentGrowthPhotos = [];
+
+
+  for (const file of files) {
+
+    const data =
+      await fileToDataURL(file);
+
+    currentGrowthPhotos.push(data);
+
+  }
+
+
+  renderGrowthPreview();
+}
+
+
+/* =========================================
+   成長写真プレビュー表示
+========================================= */
+
+function renderGrowthPreview() {
+
+  const list =
+    document.getElementById("growthPreviewList");
+
+
+  list.innerHTML = "";
+
+
+  currentGrowthPhotos.forEach(photo => {
+
+    const img =
+      document.createElement("img");
+
+    img.src = photo;
+    img.className = "growth-preview";
+    img.alt = "成長写真";
+
+    list.appendChild(img);
+
+  });
+}
+
+
+/* =========================================
+   牛を保存
+========================================= */
+
+/* =========================================
+   アルバムを開く
+========================================= */
+
+function openAlbum(index) {
+
+  const cow = cows[index];
+
+  if (!cow) return;
+
+
+  document.getElementById("homeScreen")
+    .classList.add("hidden");
+
+  document.getElementById("registerScreen")
+    .classList.add("hidden");
+
+  document.getElementById("albumScreen")
+    .classList.remove("hidden");
+
+
+  let growthPhotos = "";
+
+
+  (cow.growthPhotos || [])
+    .forEach(photo => {
+
+      growthPhotos += `
+        <img
+          class="album-photo"
+          src="${photo}"
+          alt="成長写真"
+        >
+      `;
+
+    });
+
+
+  document.getElementById("albumContent").innerHTML = `
+
+    <div class="album-header">
+
+      ${
+        cow.birthPhoto
+          ? `
+            <img
+              class="album-cover"
+              src="${cow.birthPhoto}"
+              alt="出生時写真"
+            >
+          `
+          : `
+            <div style="
+              aspect-ratio:4/3;
+              display:flex;
+              align-items:center;
+              justify-content:center;
+              background:#eee9e2;
+              font-size:65px;
+            ">🐄</div>
+          `
+      }
+
+
+      <div class="album-info">
+
+        <div class="album-number">
+          ${escapeHTML(
+            cow.number || "個体番号未登録"
+          )}
+        </div>
+
+
+        ${
+          cow.calfName
+            ? `
+              <div class="album-name">
+                ${escapeHTML(cow.calfName)}
+              </div>
+            `
+            : ""
+        }
+
+
+        <div class="album-basic">
+
+          ${escapeHTML(
+            cow.birthDate || "生年月日未登録"
+          )}
+
+          ・
+
+          ${escapeHTML(
+            cow.gender || "性別未登録"
+          )}
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div class="album-section">
+
+      <div class="album-section-title">
+        🌱 出生情報
+      </div>
+
+      <div class="detail-box">
+
+        父牛：
+        ${escapeHTML(cow.father || "―")}
+        <br>
+
+        母牛：
+        ${escapeHTML(cow.mother || "―")}
+        <br>
+
+        出生時体重：
+        ${
+          cow.birthWeight
+            ? escapeHTML(cow.birthWeight) + " kg"
+            : "―"
+        }
+
+      </div>
+
+    </div>
+
+
+    ${
+      growthPhotos
+        ? `
+          <div class="album-section">
+
+            <div class="album-section-title">
+              📸 成長アルバム
+            </div>
+
+            <div class="photo-grid">
+              ${growthPhotos}
+            </div>
+
+          </div>
+        `
+        : ""
+    }
+
+
+    ${
+      cow.shipDate ||
+      cow.shipWeight ||
+      cow.shipPrice ||
+      cow.shipPhoto
+        ? `
+
+          <div class="album-section">
+
+            <div class="album-section-title">
+              🚚 出荷
+            </div>
+
+
+            ${
+              cow.shipPhoto
+                ? `
+                  <img
+                    class="album-photo"
+                    src="${cow.shipPhoto}"
+                    alt="出荷時写真"
+                  >
+                `
+                : ""
+            }
+
+
+            <div
+              class="detail-box"
+              style="margin-top:8px;"
+            >
+
+              出荷日：
+              ${escapeHTML(cow.shipDate || "―")}
+              <br>
+
+              出荷体重：
+              ${
+                cow.shipWeight
+                  ? escapeHTML(cow.shipWeight) + " kg"
+                  : "―"
+              }
+              <br>
+
+              出荷価格：
+              ${
+                cow.shipPrice
+                  ? Number(cow.shipPrice).toLocaleString() + " 円"
+                  : "―"
+              }
+
+            </div>
+
+          </div>
+
+        `
+        : ""
+    }
+
+
+    <div class="album-section">
+
+      <button
+        class="sub-button"
+        onclick="editCow(${index})"
+      >
+        ✏️ この牛を編集する
+      </button>
+
+    </div>
+
+  `;
+}
+
+
+/* =========================================
+   フォームリセット
+========================================= */
+
+function resetForm() {
+
+  document.getElementById("cowNumber").value = "";
+
+  document.getElementById("cowName").value = "";
+
+  document.getElementById("birthDate").value = "";
+
+  document.getElementById("gender").value = "";
+
+  document.getElementById("father").value = "";
+
+  document.getElementById("mother").value = "";
+
+  document.getElementById("birthWeight").value = "";
+
+  document.getElementById("shipDate").value = "";
+
+  document.getElementById("shipWeight").value = "";
+
+  document.getElementById("shipPrice").value = "";
+
+
+  /* file inputもリセット */
+
+  document.getElementById("birthPhoto").value = "";
+
+  document.getElementById("growthPhotos").value = "";
+
+  document.getElementById("shipPhoto").value = "";
+
+
+  document.getElementById("birthPreview")
+    .removeAttribute("src");
+
+  document.getElementById("birthPreview")
+    .style.display = "none";
+
+
+  document.getElementById("shipPreview")
+    .removeAttribute("src");
+
+  document.getElementById("shipPreview")
+    .style.display = "none";
+
+
+  document.getElementById("growthPreviewList")
+    .innerHTML = "";
+
+
+  currentBirthPhoto = "";
+  currentShipPhoto = "";
+  currentGrowthPhotos = [];
+}
+
+
+/* =========================================
+   HTMLエスケープ
+========================================= */
+
+function escapeHTML(value) {
+
+  return String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+
+/* =========================================
+   初期表示
+========================================= */
+
+</script>
+
+</body>
+</html>
