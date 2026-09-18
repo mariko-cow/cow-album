@@ -611,7 +611,44 @@ input[type="file"] {
 .login-box h2 { margin:0 0 8px; font-size:21px; }
 .login-box p { margin:0 0 20px; color:#8b837b; font-size:13px; line-height:1.6; }
 .login-error { color:#b44; font-size:13px; margin-top:10px; line-height:1.5; }
-</style>
+.list-header {
+  margin-top: 22px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-width: 0;
+}
+
+.list-header .list-title {
+  margin-top: 0;
+  flex: 1;
+  min-width: 0;
+}
+
+.sort-select {
+  flex: 0 1 180px;
+  min-width: 145px;
+  min-height: 42px;
+  padding: 8px 10px;
+  border: 1px solid #ded8d0;
+  border-radius: 10px;
+  background: #fffdfa;
+  font-size: 13px;
+}
+
+@media (max-width: 350px) {
+  .list-header {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 7px;
+  }
+
+  .sort-select {
+    width: 100%;
+    flex: none;
+  }
+}</style>
 </head>
 
 <body>
@@ -659,10 +696,20 @@ input[type="file"] {
     </button>
   </div>
 
+  <div class="list-header">
   <div class="list-title">🐄 登録されている牛</div>
 
-  <div id="cowList"></div>
+  <select id="cowSort" class="sort-select" onchange="renderCowList()">
+    <option value="registered_desc">登録が新しい順</option>
+    <option value="birth_desc">生年月日が新しい順</option>
+    <option value="birth_asc">生年月日が古い順</option>
+    <option value="number_asc">個体識別番号順</option>
+    <option value="weight_desc">出荷体重が大きい順</option>
+    <option value="price_desc">出荷価格が高い順</option>
+  </select>
+</div>
 
+<div id="cowList"></div>
   <!-- 個体別ランキング -->
   <div class="ranking-section">
     <div class="ranking-title">⚖️ 出荷体重ランキング</div>
@@ -1240,28 +1287,130 @@ function getFilteredCows() {
   const father =
     document.getElementById("fatherFilter").value;
 
+  const sortType =
+    document.getElementById("cowSort")?.value ||
+    "registered_desc";
 
-  return cows
-    .map((cow, index) => ({
-      cow,
-      index
-    }))
-    .filter(item => {
+  const filtered =
+    cows
+      .map((cow, index) => ({
+        cow,
+        index
+      }))
+      .filter(item => {
 
-      const cow = item.cow;
+        const cow = item.cow;
 
-      if (mother && cow.mother !== mother) {
-        return false;
-      }
+        if (mother && cow.mother !== mother) {
+          return false;
+        }
 
-      if (father && cow.father !== father) {
-        return false;
-      }
+        if (father && cow.father !== father) {
+          return false;
+        }
 
-      return true;
-    });
+        return true;
+      });
+
+  filtered.sort((a, b) => {
+    const cowA = a.cow;
+    const cowB = b.cow;
+
+    if (sortType === "registered_desc") {
+      return (
+        Number(cowB.dbId || 0) -
+        Number(cowA.dbId || 0)
+      );
+    }
+
+    if (sortType === "birth_desc") {
+      const dateA = cowA.birthDate || "";
+      const dateB = cowB.birthDate || "";
+      if (!dateA && !dateB) return a.index - b.index;
+      if (!dateA) return 1;
+      if (!dateB) return -1;
+
+      return (
+        dateB.localeCompare(dateA) ||
+        Number(cowB.dbId || 0) -
+        Number(cowA.dbId || 0)
+      );
+    }
+
+    if (sortType === "birth_asc") {
+      const dateA = cowA.birthDate || "";
+      const dateB = cowB.birthDate || "";
+      if (!dateA && !dateB) return a.index - b.index;
+      if (!dateA) return 1;
+      if (!dateB) return -1;
+
+      return (
+        dateA.localeCompare(dateB) ||
+        Number(cowB.dbId || 0) -
+        Number(cowA.dbId || 0)
+      );
+    }
+
+    if (sortType === "number_asc") {
+      const numberA = String(cowA.number || "").trim();
+      const numberB = String(cowB.number || "").trim();
+
+      if (!numberA && !numberB) return a.index - b.index;
+      if (!numberA) return 1;
+      if (!numberB) return -1;
+
+      return (
+        numberA.localeCompare(
+          numberB,
+          "ja",
+          { numeric: true, sensitivity: "base" }
+        ) ||
+        Number(cowB.dbId || 0) -
+        Number(cowA.dbId || 0)
+      );
+    }
+
+    if (sortType === "weight_desc") {
+      const weightA = Number(cowA.shipWeight);
+      const weightB = Number(cowB.shipWeight);
+
+      const hasA = weightA > 0;
+      const hasB = weightB > 0;
+
+      if (!hasA && !hasB) return a.index - b.index;
+      if (!hasA) return 1;
+      if (!hasB) return -1;
+
+      return (
+        weightB - weightA ||
+        Number(cowB.dbId || 0) -
+        Number(cowA.dbId || 0)
+      );
+    }
+
+    if (sortType === "price_desc") {
+      const priceA = Number(cowA.shipPrice);
+      const priceB = Number(cowB.shipPrice);
+
+      const hasA = priceA > 0;
+      const hasB = priceB > 0;
+
+      if (!hasA && !hasB) return a.index - b.index;
+      if (!hasA) return 1;
+      if (!hasB) return -1;
+
+      return (
+        priceB - priceA ||
+        Number(cowB.dbId || 0) -
+        Number(cowA.dbId || 0)
+      );
+    }
+
+    return a.index - b.index;
+  });
+
+  return filtered;
 }
-
 
 /* =========================================
    牛一覧
