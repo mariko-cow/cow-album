@@ -1417,82 +1417,57 @@ function getFilteredCows() {
 ========================================= */
 
 function renderCowList() {
+  const list = document.getElementById("cowList");
+  const filtered = getFilteredCows();
 
-  const list =
-    document.getElementById("cowList");
+  const sortType =
+    document.getElementById("cowSort")?.value ||
+    "registered_desc";
 
-  const filtered =
-    getFilteredCows();
+  // 初期状態は最新2頭だけ表示
+  // ソートを変更したら全頭表示
+  const displayCows =
+    sortType === "registered_desc"
+      ? filtered.slice(0, 2)
+      : filtered;
 
-
-  if (filtered.length === 0) {
-
+  if (displayCows.length === 0) {
     list.innerHTML = `
       <div class="empty">
         <div style="font-size:50px;">🐄</div>
         <div>該当する牛がいません</div>
-      </div>
-    `;
-
+      </div>`;
     return;
   }
 
+  let html = `<div class="cow-grid">`;
 
-  let html =
-    `<div class="cow-grid">`;
-
-
-  filtered.forEach(item => {
-
+  displayCows.forEach(item => {
     const cow = item.cow;
     const index = item.index;
 
-
     const image =
       cow.birthPhoto ||
-      (
-        cow.growthPhotos &&
-        cow.growthPhotos.length
-          ? cow.growthPhotos[0]
-          : ""
-      );
-
+      (cow.growthPhotos && cow.growthPhotos.length
+        ? cow.growthPhotos[0]
+        : "");
 
     html += `
-
-      <div class="cow-card"
-           onclick="openAlbum(${index})">
-
+      <div class="cow-card" onclick="openAlbum(${index})">
         ${
           image
             ? `<img src="${image}" alt="牛の写真">`
-            : `
-              <div style="
-                aspect-ratio:1;
-                display:flex;
-                align-items:center;
-                justify-content:center;
-                background:#eee9e2;
-                font-size:45px;
-              ">🐄</div>
-            `
+            : `<div style="aspect-ratio:1;display:flex;align-items:center;justify-content:center;background:#eee9e2;font-size:45px;">🐄</div>`
         }
 
         <div class="cow-info">
-
           <div class="cow-number">
-            ${escapeHTML(
-              cow.number || "個体番号未登録"
-            )}
+            ${escapeHTML(cow.number || "個体番号未登録")}
           </div>
 
           ${
             cow.calfName
-              ? `
-                <div class="cow-name">
-                  ${escapeHTML(cow.calfName)}
-                </div>
-              `
+              ? `<div class="cow-name">${escapeHTML(cow.calfName)}</div>`
               : ""
           }
 
@@ -1502,28 +1477,17 @@ function renderCowList() {
 
           <button
             class="sub-button edit-button"
-            onclick="
-              event.stopPropagation();
-              editCow(${index});
-            "
+            onclick="event.stopPropagation(); editCow(${index});"
           >
             ✏️ 編集
           </button>
-
         </div>
-
-      </div>
-
-    `;
-
+      </div>`;
   });
 
-
   html += `</div>`;
-
   list.innerHTML = html;
 }
-
 
 /* =========================================
    ランキング全体
