@@ -699,8 +699,9 @@ input[type="file"] {
   <div class="list-header">
   <div class="list-title">🐄 登録されている牛</div>
 
-  <select id="cowSort" class="sort-select" onchange="renderCowList()">
-    <option value="registered_desc">登録が新しい順</option>
+ <select id="cowSort" class="sort-select" onchange="renderCowList()">
+  <option value="">並び替えなし</option>
+  <option value="registered_desc">登録が新しい順</option>
     <option value="birth_desc">生年月日が新しい順</option>
     <option value="birth_asc">生年月日が古い順</option>
     <option value="number_asc">個体識別番号順</option>
@@ -1316,7 +1317,13 @@ function getFilteredCows() {
     const cowA = a.cow;
     const cowB = b.cow;
 
-    if (sortType === "registered_desc") {
+    if (!sortType) {
+  filtered.sort((a, b) =>
+    Number(b.cow.dbId || 0) -
+    Number(a.cow.dbId || 0)
+  );
+  return filtered;
+}if (sortType === "registered_desc") {
       return (
         Number(cowB.dbId || 0) -
         Number(cowA.dbId || 0)
@@ -1427,9 +1434,9 @@ function renderCowList() {
   // 初期状態は最新2頭だけ表示
   // ソートを変更したら全頭表示
   const displayCows =
-    sortType === "registered_desc"
-      ? filtered.slice(0, 2)
-      : filtered;
+  sortType === ""
+    ? filtered.slice(0, 2)
+    : filtered;
 
   if (displayCows.length === 0) {
     list.innerHTML = `
