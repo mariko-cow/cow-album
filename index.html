@@ -789,8 +789,12 @@ input[type="file"] {
     </div>
 
     <div class="field">
-      <label>生年月日</label>
-      <input id="birthDate" type="date">
+     <label>生年月日</label>
+<div class="filter-row">
+  <select id="birthYear"></select>
+  <select id="birthMonth"></select>
+  <select id="birthDay"></select>
+</div>
     </div>
 
     <div class="field">
@@ -890,7 +894,11 @@ input[type="file"] {
 
     <div class="field">
       <label>出荷日</label>
-      <input id="shipDate" type="date">
+      <div class="filter-row">
+  <select id="shipYear"></select>
+  <select id="shipMonth"></select>
+  <select id="shipDay"></select>
+</div>
     </div>
 
     <div class="field">
@@ -1011,17 +1019,60 @@ async function loadCows() {
   }));
 }
 
-async function saveCow() {
+function setupDateSelects(prefix) {
+  const year = document.getElementById(prefix + "Year");
+  const month = document.getElementById(prefix + "Month");
+  const day = document.getElementById(prefix + "Day");
+
+  year.innerHTML = '<option value="">年</option>';
+  month.innerHTML = '<option value="">月</option>';
+  day.innerHTML = '<option value="">日</option>';
+
+  const currentYear = new Date().getFullYear();
+
+  for (let y = 2010; y <= currentYear + 1; y++) {
+    year.innerHTML += `<option value="${y}">${y}年</option>`;
+  }
+
+  for (let m = 1; m <= 12; m++) {
+    month.innerHTML += `<option value="${m}">${m}月</option>`;
+  }
+
+  for (let d = 1; d <= 31; d++) {
+    day.innerHTML += `<option value="${d}">${d}日</option>`;
+  }
+}
+
+function getDateValue(prefix) {
+  const year = document.getElementById(prefix + "Year").value;
+  const month = document.getElementById(prefix + "Month").value;
+  const day = document.getElementById(prefix + "Day").value;
+
+  if (!year || !month || !day) return "";
+
+  return `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+}
+
+function setDateValue(prefix, value) {
+  if (!value) return;
+
+  const [year, month, day] = value.split("-");
+
+  document.getElementById(prefix + "Year").value = year;
+  document.getElementById(prefix + "Month").value = Number(month);
+  document.getElementById(prefix + "Day").value = Number(day);
+}setupDateSelects("birth");
+setupDateSelects("ship");async function saveCow() {
   const cow={
     number:document.getElementById("cowNumber").value,
     calfName:document.getElementById("cowName").value,
-    birthDate:document.getElementById("birthDate").value,
+   birthDate:getDateValue("birth"),
     gender:document.getElementById("gender").value,
     father:document.getElementById("father").value,
     mother:document.getElementById("mother").value,
     birthWeight:document.getElementById("birthWeight").value,
     birthPhoto:currentBirthPhoto, growthPhotos:currentGrowthPhotos,
-    shipDate:document.getElementById("shipDate").value,
+    shipDate:getDateValue("ship"),
     shipWeight:document.getElementById("shipWeight").value,
     shipPrice:document.getElementById("shipPrice").value, shipPhoto:currentShipPhoto
   };
@@ -1128,8 +1179,7 @@ function loadCowToForm(cow) {
   document.getElementById("cowName").value =
     cow.calfName || "";
 
-  document.getElementById("birthDate").value =
-    cow.birthDate || "";
+  setDateValue("birth", cow.birthDate);
 
   document.getElementById("gender").value =
     cow.gender || "";
@@ -1143,9 +1193,7 @@ function loadCowToForm(cow) {
   document.getElementById("birthWeight").value =
     cow.birthWeight || "";
 
-  document.getElementById("shipDate").value =
-    cow.shipDate || "";
-
+  setDateValue("ship", cow.shipDate);
   document.getElementById("shipWeight").value =
     cow.shipWeight || "";
 
@@ -2621,7 +2669,9 @@ function resetForm() {
 
   document.getElementById("cowName").value = "";
 
-  document.getElementById("birthDate").value = "";
+  document.getElementById("birthYear").value = "";
+document.getElementById("birthMonth").value = "";
+document.getElementById("birthDay").value = "";
 
   document.getElementById("gender").value = "";
 
@@ -2631,7 +2681,9 @@ function resetForm() {
 
   document.getElementById("birthWeight").value = "";
 
-  document.getElementById("shipDate").value = "";
+  document.getElementById("shipYear").value = "";
+document.getElementById("shipMonth").value = "";
+document.getElementById("shipDay").value = "";
 
   document.getElementById("shipWeight").value = "";
 
