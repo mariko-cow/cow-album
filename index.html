@@ -1132,8 +1132,7 @@ function showHome() {
 
 
 function showRegister(index = null) {
-  setupDateSelects("birth");
-setupDateSelects("ship");
+ 
 
   document.getElementById("homeScreen").classList.add("hidden");
   document.getElementById("registerScreen").classList.remove("hidden");
@@ -1142,6 +1141,8 @@ setupDateSelects("ship");
   editingCowIndex = index;
 
   resetForm();
+  setupDateSelects("birth");
+setupDateSelects("ship");
 
   if (editingCowIndex !== null) {
     loadCowToForm(cows[editingCowIndex]);
