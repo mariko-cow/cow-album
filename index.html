@@ -1061,8 +1061,7 @@ function setDateValue(prefix, value) {
   document.getElementById(prefix + "Year").value = year;
   document.getElementById(prefix + "Month").value = Number(month);
   document.getElementById(prefix + "Day").value = Number(day);
-}setupDateSelects("birth");
-setupDateSelects("ship");async function saveCow() {
+}async function saveCow() {
   const cow={
     number:document.getElementById("cowNumber").value,
     calfName:document.getElementById("cowName").value,
@@ -1107,7 +1106,9 @@ setupDateSelects("ship");async function saveCow() {
     currentUser=data.session.user;
     document.getElementById("loginScreen").style.display="none";
     document.getElementById("app").style.display="block";
-    await loadCows(); showHome();
+    setupDateSelects("birth");
+setupDateSelects("ship");
+await loadCows(); showHome();
   }
 });
 
