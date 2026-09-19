@@ -1142,7 +1142,6 @@ function showRegister(index = null) {
 
   resetForm();
   setupDateSelects("birth");
-  console.log("日付設定実行");
 setupDateSelects("ship");
 
   if (editingCowIndex !== null) {
@@ -1341,8 +1340,8 @@ function getFilteredCows() {
     document.getElementById("fatherFilter").value;
 
   const sortType =
-    document.getElementById("cowSort")?.value ||
-    "registered_desc";
+  document.getElementById("cowSort")?.value ||
+  "";
 
   const filtered =
     cows
