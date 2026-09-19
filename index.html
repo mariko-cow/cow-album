@@ -1106,8 +1106,7 @@ function setDateValue(prefix, value) {
     currentUser=data.session.user;
     document.getElementById("loginScreen").style.display="none";
     document.getElementById("app").style.display="block";
-    setupDateSelects("birth");
-setupDateSelects("ship");
+    
 await loadCows(); showHome();
   }
 });
@@ -1133,6 +1132,8 @@ function showHome() {
 
 
 function showRegister(index = null) {
+  setupDateSelects("birth");
+setupDateSelects("ship");
 
   document.getElementById("homeScreen").classList.add("hidden");
   document.getElementById("registerScreen").classList.remove("hidden");
