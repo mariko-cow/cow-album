@@ -1142,6 +1142,7 @@ function showRegister(index = null) {
 
   resetForm();
   setupDateSelects("birth");
+  console.log("日付設定実行");
 setupDateSelects("ship");
 
   if (editingCowIndex !== null) {
@@ -1479,8 +1480,7 @@ function renderCowList() {
   const filtered = getFilteredCows();
 
   const sortType =
-    document.getElementById("cowSort")?.value ||
-    "registered_desc";
+  document.getElementById("cowSort")?.value || "";
 
   // 初期状態は最新2頭だけ表示
   // ソートを変更したら全頭表示
