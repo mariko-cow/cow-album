@@ -2489,13 +2489,14 @@ function openAlbum(index) {
   (cow.growthPhotos || [])
     .forEach(photo => {
 
-      growthPhotos += `
-        <img
-          class="album-photo"
-          src="${photo}"
-          alt="成長写真"
-        >
-      `;
+     growthPhotos += `
+  <img
+    class="album-photo"
+    src="${photo}"
+    alt="成長写真"
+    loading="lazy"
+  >
+`;
 
     });
 
@@ -2507,11 +2508,12 @@ function openAlbum(index) {
       ${
         cow.birthPhoto
           ? `
-            <img
-              class="album-cover"
-              src="${cow.birthPhoto}"
-              alt="出生時写真"
-            >
+           <img
+  class="album-cover"
+  src="${cow.birthPhoto}"
+  alt="出生時写真"
+  loading="lazy"
+>
           `
           : `
             <div style="
@@ -2629,11 +2631,12 @@ function openAlbum(index) {
             ${
               cow.shipPhoto
                 ? `
-                  <img
-                    class="album-photo"
-                    src="${cow.shipPhoto}"
-                    alt="出荷時写真"
-                  >
+                <img
+  class="album-photo"
+  src="${cow.shipPhoto}"
+  alt="出荷時写真"
+  loading="lazy"
+>
                 `
                 : ""
             }
